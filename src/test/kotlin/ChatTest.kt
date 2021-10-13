@@ -1,5 +1,4 @@
 
-import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
@@ -11,29 +10,27 @@ class ChatTest {
         val service = ChatService
         service.addChat(chat1)
 
-        val result = chat1.addUser(100)
+        val result = service.addUser(49,100)
 
         assertTrue(result)
     }
-/*
+
     @Test
     fun deleteMessage() {
         val chat1 = Chat(49)
         val service = ChatService
         service.addChat(chat1)
-        chat1.addUser(100)
+        service.addUser(49,100)
         val message1 = Message(1,100,"a")
         val message2 = Message(2,101,"b")
         service.sendMessage(49,message1)
         service.sendMessage(50,message2)
 
-        val result = chat1.deleteMessage(message2,101)
+        val result = service.deleteMessage(50,message2,101)
 
         assertTrue(result)
     }
 
- */
-/*
     @Test
     fun getMessagesForBeginningWith() {
         val chat2 = Chat(50)
@@ -44,12 +41,10 @@ class ChatTest {
         service.sendMessage(50,message1)
         service.sendMessage(50,message2)
 
-        val result = chat2.getMessagesForBeginningWith(1)
+        val result = service.getMessagesForBeginningWith(50,1)
 
-       assertFalse(result.isEmpty())
+       assertTrue(result?.isEmpty() == false)
     }
-
- */
 
     @Test
     fun getAllMessages() {
@@ -59,9 +54,9 @@ class ChatTest {
         val message2 = Message(2,101,"b")
         service.sendMessage(50,message2)
 
-        val result2 = chat2.getAllMessages()
+        val result2 = service.getAllMessages(50)
 
-        assertFalse(result2.isEmpty())
+        assertTrue(result2?.isEmpty() == false)
     }
 
 }

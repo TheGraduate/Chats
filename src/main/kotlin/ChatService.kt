@@ -4,32 +4,55 @@ object ChatService {
     var uniqId = 0
 
     fun sendMessage (chatId: Int, message: Message): Boolean {
-        message.messageId = uniqId++
-        val flag = chats.find { it.chatId == chatId }?.messages?.add(message)
-        if (flag == true) {
+        if (chats.find { it.chatId == chatId }?.messages?.add(message) == true) {
             return true
         }
         return false
     }
 
     fun addChat (chat: Chat): Boolean {
-        chats.add(chat)
-        if (chats.contains(chat)) {
+        if (chats.add(chat)) {
+            return true
+        }
+        return false
+    }
+
+    fun addUser (chatId: Int, userId: Int): Boolean {
+        if (chats.find { it.chatId == chatId }?.users?.add(userId) == true) {
             return true
         }
         return false
     }
 
     fun deleteChat (chat: Chat): Boolean {
-        if (chats.contains(chat)) {
-            chats.remove(chat)
+        if (chats.remove(chat)) {
             return true
         }
         return false
     }
 
+    fun deleteMessage (chatId: Int, message: Message, userId: Int): Boolean {
+        if (chats.find { it.chatId == chatId }?.messages?.remove(message) == true && userId == message.senderId) {
+            val emptyChat = chats.find { it.messages.isEmpty() }
+            chats.remove(emptyChat)
+            return true
+        }
+        return false
+    }
+
+    fun getMessagesForBeginningWith (chatId: Int, messageId: Int): List<Message>? {
+        val listMessages = chats.find { it.chatId == chatId }?.messages?.filter { it.messageId >= messageId }
+        listMessages?.forEach { it.readable = true }
+        return listMessages
+    }
+
+    fun getAllMessages (chatId: Int): MutableList<Message>? {
+        val listMessages = chats.find { it.chatId == chatId }?.messages
+        listMessages?.forEach { it.readable = true }
+        return listMessages
+    }
+
     fun getAllUnreadedChats(): List<Chat> {
-        val chatFounded = chats.filter { it.messages.find { !it.readable } != null }
-        return chatFounded
+        return chats.filter { it.messages.find { !it.readable } != null }
     }
 }
